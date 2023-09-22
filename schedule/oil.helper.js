@@ -9,6 +9,7 @@ const RecordModel = require('../model/productionDataRecord');
 const ASSET = require('../dict').ASSETTYPE.OIL;
 const moment = require('moment');
 const BigNumber = require('bignumber.js');
+const logModel = require('../model/logs');
 
 const _getwatercut = async (date) => {
     const location_id = 996987;
@@ -40,6 +41,7 @@ const process = async (location_id, date) => {
     }
     const watercut = await _getwatercut(date);
     let amount = 0;
+    let success = true;
     switch (location_id) {
         case 996986:
             const ldata = await ZediModel.getProductionDataFromZediData({
@@ -47,12 +49,18 @@ const process = async (location_id, date) => {
                 location_id,
                 date
             });
-            if(!ldata.recordset[0] || !ldata.recordset[0].amount) break;
+            if (!ldata.recordset[0] || !ldata.recordset[0].amount) {
+                success = false;
+                break;
+            }
             const liquid = BigNumber(ldata.recordset[0].amount);
             amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
             break;
     }
-    await _save(location_id, date, amount);
+    if (success) {
+        await _save(location_id, date, amount);
+        await logModel.newLogs({location_id, date});
+    }
     return;
 }
 

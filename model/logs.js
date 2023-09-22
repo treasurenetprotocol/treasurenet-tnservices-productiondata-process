@@ -7,14 +7,14 @@
 const mongoose = require("../db/mongodb.connect");
 
 const LogsSchema = new mongoose.Schema({
-    error: Object,
+    content: Object,
     timestamp: {type: Date, default: Date.now},
 })
 
 const logsModel = mongoose.model("productiondatarecord_logs", LogsSchema);
 
-const newLogs = async (error) => {
-    let newLogsEntity = new logsModel({error});
+const newLogs = async (content) => {
+    let newLogsEntity = new logsModel({content});
     return newLogsEntity.save();
 }
 

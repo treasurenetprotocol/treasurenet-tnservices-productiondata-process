@@ -6,7 +6,7 @@
  */
 
 const helper = require('./oil.helper');
-const errorlogModel = require('../model/logs');
+const logModel = require('../model/logs');
 
 const Process = async (date) => {
     try {
@@ -16,7 +16,7 @@ const Process = async (date) => {
         }
     } catch (e) {
         console.dir(e);
-        await errorlogModel.newLogs(e);
+        await logModel.newLogs(e);
     }
 
 }

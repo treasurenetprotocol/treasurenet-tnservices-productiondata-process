@@ -7,6 +7,7 @@
 const RecordModel = require("../model/productionDataRecord");
 const moment = require("moment");
 const ZediModel = require("../model/zediData");
+const logModel = require("../model/logs");
 const ASSET = require('../dict').ASSETTYPE.GAS;
 
 const _exist = async (location_id, date) => await RecordModel.existOrNot({
@@ -28,6 +29,7 @@ const process = async (location_id, date) => {
         return;
     }
     let amount = 0;
+    let success = true;
     switch (location_id) {
         case 996986:
             const vdata = await ZediModel.getProductionDataFromZediData({
@@ -35,12 +37,18 @@ const process = async (location_id, date) => {
                 location_id,
                 date
             });
-            if(!vdata.recordset[0] || !vdata.recordset[0].amount) break;
+            if (!vdata.recordset[0] || !vdata.recordset[0].amount) {
+                success = false;
+                break;
+            }
             amount = +vdata.recordset[0].amount;
             amount = amount.toFixed(4);
             break;
     }
-    await _save(location_id, date, amount);
+    if (success) {
+        await _save(location_id, date, amount);
+        await logModel.newLogs({location_id, date});
+    }
     return;
 }
 
