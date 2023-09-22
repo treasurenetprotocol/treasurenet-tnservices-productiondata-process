@@ -52,7 +52,6 @@ const process = async (location_id, date) => {
             amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
             break;
     }
-    if (amount === 0) return;
     await _save(location_id, date, amount);
     return;
 }
