@@ -1,0 +1,20 @@
+{
+  "name": "productiondataprocess",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bignumber.js": "^9.1.2",
+    "dotenv": "^16.3.1",
+    "moment": "^2.29.4",
+    "mongoose": "^7.5.2",
+    "mssql": "^10.0.1",
+    "node-schedule": "^2.1.1"
+  }
+}
