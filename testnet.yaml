@@ -1,0 +1,17 @@
+version: '3'
+services:
+  treasureNet_productiondataprocess:
+    image: treasurenet/productiondataprocess:1.0
+    network_mode: "host"
+    restart: unless-stopped
+    container_name: productiondataprocess
+    environment:
+      - MSSQL_DATABASE_USER=admin
+      - MSSQL_DATABASE_PASSWORD=X.y=zx.y=z
+      - MSSQL_DATABASE_DBNAME=concourse-1
+      - MSSQL_DATABASE_SERVER=concourse-1.cixtvc52yod1.us-west-1.rds.amazonaws.com
+      - MSSQL_DATABASE_PORT=1433
+      - MSSQL_DATABASE_TABLE=ZediDataQTR
+      - MONGO_URL=mongodb+srv://treasureNet:Lf7bZVPpArjyru9O@tnclusterm20.a9fcq.mongodb.net/treasureNet?retryWrites=true&w=majority
+    volumes:
+      - ./config/wellinfo_testnet.js:/app/config/wellinfo.js

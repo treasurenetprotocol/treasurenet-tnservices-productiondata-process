@@ -10,6 +10,7 @@ const ASSET = require('../dict').ASSETTYPE.OIL;
 const moment = require('moment');
 const BigNumber = require('bignumber.js');
 const logModel = require('../model/logs');
+const wellinfo = require('../config/wellinfo');
 
 const _getwatercut = async (date) => {
     const location_id = 996987;
@@ -27,18 +28,19 @@ const _exist = async (location_id, date) => await RecordModel.existOrNot({
     date: +moment(date).format('YYMMDD')
 });
 
-const _save = async (location_id, date, amount) => await RecordModel.newRecord({
+const _save = async (location_id, date, amount, uniqueId) => await RecordModel.newRecord({
     type: ASSET,
     location_id,
     date: +moment(date).format('YYMMDD'),
     month: +moment(date).format('YYMM'),
-    amount
+    amount, uniqueId
 })
 
 const process = async (location_id, date) => {
     if (await _exist(location_id, date)) {
         return;
     }
+    const uniqueId = wellinfo.uniqueId[location_id][+ASSET];
     const watercut = await _getwatercut(date);
     let amount = 0;
     switch (location_id) {
@@ -56,7 +58,7 @@ const process = async (location_id, date) => {
             amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
             break;
     }
-    await _save(location_id, date, amount);
+    await _save(location_id, date, amount, uniqueId);
     await logModel.newLogs({location_id, date});
     return;
 }

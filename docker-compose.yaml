@@ -1,0 +1,7 @@
+version: '3'
+services:
+  treasureNet_productiondataprocess:
+    image: treasurenet/productiondataprocess:1.0
+    network_mode: "host"
+    restart: unless-stopped
+    container_name: productiondataprocess

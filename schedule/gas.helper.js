@@ -9,6 +9,7 @@ const moment = require("moment");
 const ZediModel = require("../model/zediData");
 const logModel = require("../model/logs");
 const ASSET = require('../dict').ASSETTYPE.GAS;
+const wellinfo = require('../config/wellinfo');
 
 const _exist = async (location_id, date) => await RecordModel.existOrNot({
     type: ASSET,
@@ -16,18 +17,19 @@ const _exist = async (location_id, date) => await RecordModel.existOrNot({
     date: +moment(date).format('YYMMDD')
 });
 
-const _save = async (location_id, date, amount) => await RecordModel.newRecord({
+const _save = async (location_id, date, amount, uniqueId) => await RecordModel.newRecord({
     type: ASSET,
     location_id,
     date: +moment(date).format('YYMMDD'),
     month: +moment(date).format('YYMM'),
-    amount
+    amount, uniqueId
 })
 
 const process = async (location_id, date) => {
     if (await _exist(location_id, date)) {
         return;
     }
+    const uniqueId = wellinfo.uniqueId[location_id][+ASSET];
     let amount = 0;
     switch (location_id) {
         case 996986:
@@ -44,7 +46,7 @@ const process = async (location_id, date) => {
             amount = amount.toFixed(4);
             break;
     }
-    await _save(location_id, date, amount);
+    await _save(location_id, date, amount, uniqueId);
     await logModel.newLogs({location_id, date});
     return;
 }
