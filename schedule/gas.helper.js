@@ -29,7 +29,6 @@ const process = async (location_id, date) => {
         return;
     }
     let amount = 0;
-    let success = true;
     switch (location_id) {
         case 996986:
             const vdata = await ZediModel.getProductionDataFromZediData({
@@ -38,17 +37,15 @@ const process = async (location_id, date) => {
                 date
             });
             if (!vdata.recordset[0] || !vdata.recordset[0].amount) {
-                success = false;
+                amount = 0;
                 break;
             }
             amount = +vdata.recordset[0].amount;
             amount = amount.toFixed(4);
             break;
     }
-    if (success) {
-        await _save(location_id, date, amount);
-        await logModel.newLogs({location_id, date});
-    }
+    await _save(location_id, date, amount);
+    await logModel.newLogs({location_id, date});
     return;
 }
 
