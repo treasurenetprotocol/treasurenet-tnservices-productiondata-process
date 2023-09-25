@@ -10,6 +10,7 @@ const ZediModel = require("../model/zediData");
 const logModel = require("../model/logs");
 const ASSET = require('../dict').ASSETTYPE.GAS;
 const wellinfo = require('../config/wellinfo');
+const BigNumber = require("bignumber.js");
 
 const _exist = async (location_id, date) => await RecordModel.existOrNot({
     type: ASSET,
@@ -25,15 +26,25 @@ const _save = async (location_id, date, amount, uniqueId) => await RecordModel.n
     amount, uniqueId
 })
 
+const _getleftgas = async (location_id, date) => {
+    const lgdata = await ZediModel.getProductionDataFromZediData({
+        sensor: 'Volume',
+        location_id,
+        date
+    })
+    return BigNumber(+lgdata.recordset[0].amount);
+}
+
 const process = async (location_id, date) => {
     if (await _exist(location_id, date)) {
         return;
     }
     const uniqueId = wellinfo.uniqueId[location_id][+ASSET];
     let amount = 0;
+    let vdata;
     switch (location_id) {
         case 996986:
-            const vdata = await ZediModel.getProductionDataFromZediData({
+            vdata = await ZediModel.getProductionDataFromZediData({
                 sensor: 'Current Gas Accumulation',
                 location_id,
                 date
@@ -43,6 +54,51 @@ const process = async (location_id, date) => {
                 break;
             }
             amount = +vdata.recordset[0].amount;
+            amount = amount.toFixed(4);
+            break;
+        case 1000225:
+        case 1000286:
+        case 1001267:
+        case 1007764:
+        case 1035344:
+            vdata = await ZediModel.getProductionDataFromZediData({
+                sensor: 'Volume',
+                location_id,
+                date
+            });
+            if (!vdata.recordset[0] || !vdata.recordset[0].amount) {
+                amount = 0;
+                break;
+            }
+            amount = +vdata.recordset[0].amount;
+            amount = amount.toFixed(4);
+            break;
+        case 1007986:
+        case 1008545:
+            vdata = await ZediModel.getProductionDataFromZediData({
+                sensor: 'Today_s Volume',
+                location_id,
+                date
+            });
+            if (!vdata.recordset[0] || !vdata.recordset[0].amount) {
+                amount = 0;
+                break;
+            }
+            amount = +vdata.recordset[0].amount;
+            amount = amount.toFixed(4);
+            break;
+        case 1049847:
+        case 1049848:
+            vdata = await ZediModel.getProductionDataFromZediData({
+                sensor: 'Volume',
+                location_id,
+                date
+            });
+            if (!vdata.recordset[0] || !vdata.recordset[0].amount) {
+                amount = 0;
+                break;
+            }
+            amount = BigNumber(+vdata.recordset[0].amount).minus(await _getleftgas(location_id, date));
             amount = amount.toFixed(4);
             break;
     }

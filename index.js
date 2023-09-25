@@ -14,16 +14,16 @@ const automaticDataProcess = async () => {
     /*const rule = new schedule.RecurrenceRule();
     rule.hour = [0, 12];
     schedule.scheduleJob(rule, async () => {*/
-        const date = moment().subtract(2, "days").format('YYYY-MM-DD');
+        /*const date = moment().subtract(2, "days").format('YYYY-MM-DD');
         await process.oilProcess(date);
-        await process.gasProcess(date);
+        await process.gasProcess(date);*/
 
         /* 跑很多天的 */
-        /*for (let i = 2; i < 32; i++) {
+        for (let i = 2; i < 92; i++) {
             const date = moment().subtract(i, "days").format('YYYY-MM-DD');
             await process.oilProcess(date);
             await process.gasProcess(date);
-        }*/
+        }
    /* })*/
 }
 
