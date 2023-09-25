@@ -14,7 +14,6 @@ const wellinfo = require('../config/wellinfo');
 
 const _getwatercut = async (date) => {
     const location_id = 996987;
-
     const wdata = await ZediModel.getProductionDataFromZediData({sensor: 'Current Water Volume', location_id, date});
     const odata = await ZediModel.getProductionDataFromZediData({sensor: 'Current Oil Volume', location_id, date});
     if(!wdata.recordset || !wdata.recordset[0] || !wdata.recordset[0].amount) return BigNumber(0);
@@ -49,6 +48,7 @@ const process = async (location_id, date) => {
     switch (location_id) {
         case 996986:
         case 1000225:
+            //从ZediData中取产量
             ldata = await ZediModel.getProductionDataFromZediData({
                 sensor: 'Current Fluid Accumulation',
                 location_id,
@@ -65,7 +65,7 @@ const process = async (location_id, date) => {
         case 1000286:
         case 1001267:
             ldata = await ZediModel.getProductionDataFromZediData({
-                sensor: 'Current Fluid Accumulations',
+                sensor: 'Current Fluids Accumulations',
                 location_id,
                 date
             });
@@ -156,6 +156,8 @@ const process = async (location_id, date) => {
             return;
 
     }
+    //计算后写到MongoDB
+    console.log(location_id,date,amount)
     await _save(location_id, date, amount, uniqueId);
     await logModel.newLogs({location_id, date});
     return;

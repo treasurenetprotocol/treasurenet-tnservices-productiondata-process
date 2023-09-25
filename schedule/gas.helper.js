@@ -27,11 +27,17 @@ const _save = async (location_id, date, amount, uniqueId) => await RecordModel.n
 })
 
 const _getleftgas = async (location_id, date) => {
+    if (location_id === 1049847){
+        location_id = 1049844
+    }else if(location_id === 1049848){
+        location_id = 1049846
+    }
     const lgdata = await ZediModel.getProductionDataFromZediData({
         sensor: 'Volume',
         location_id,
         date
     })
+    //console.log("location_id:",location_id,"lgdata:",lgdata)
     return BigNumber(+lgdata.recordset[0].amount);
 }
 
@@ -102,6 +108,7 @@ const process = async (location_id, date) => {
             amount = amount.toFixed(4);
             break;
     }
+    console.log(location_id,date,amount)
     await _save(location_id, date, amount, uniqueId);
     await logModel.newLogs({location_id, date});
     return;
