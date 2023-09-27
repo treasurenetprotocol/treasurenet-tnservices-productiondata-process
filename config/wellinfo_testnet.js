@@ -4,7 +4,7 @@
  * Date: 2023/9/22
  * Desc
  */
-module.export = {
+module.exports = {
     uniqueId: {
         '996986': ['OILuniqueId-Here', 'GASuniqueId-Here'],
         '1000225': ['OILuniqueId-Here', 'GASuniqueId-Here'],
