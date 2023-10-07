@@ -19,12 +19,13 @@ const automaticDataProcess = async () => {
         await process.gasProcess(date);*/
 
         /* 跑很多天的 */
-        const startDate = '2023-01-01'
-        for (let i = 0; i <90 ; i++) {
-            const date = moment(startDate).add(i, "days").format('YYYY-MM-DD');
-            console.log(date)
-            await process.oilProcess(date);
-            //await process.gasProcess(date);
+        const startDate = moment('2023-08-01')
+        const endDate = moment('2023-10-05')
+        for (let i = 0; startDate<=endDate ; i++) {
+            console.log(startDate.format("YYYY-MM-DD"))
+            await process.oilProcess(startDate);
+            await process.gasProcess(startDate);
+            startDate.add(1,"days")
         }
         console.log("END")
    /* })*/
