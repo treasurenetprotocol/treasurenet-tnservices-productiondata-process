@@ -8,11 +8,11 @@
 const ASSETTYPE = {
     OIL: 0,
     GAS: 1
-}
+};
 
 const STATUS = {
     UNUSED: 0,
     USED: 1
-}
+};
 
-module.exports = {ASSETTYPE, STATUS}
+module.exports = {ASSETTYPE, STATUS};

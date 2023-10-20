@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint . --fix",
     "start": "node index.js"
   },
   "keywords": [],
