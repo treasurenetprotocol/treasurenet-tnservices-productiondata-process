@@ -9,4 +9,4 @@
 module.exports = {
     oilProcess: require('./oil'),
     gasProcess: require('./gas')
-}
+};
