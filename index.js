@@ -18,7 +18,6 @@ const automaticDataProcess = async () => {
         await process.oilProcess(date);
         await process.gasProcess(date);*/
 
-    /* 跑很多天的 */
     const startDate = moment('2023-08-01');
     const endDate = moment('2023-10-05');
     for (let i = 0; startDate<=endDate ; i++) {
