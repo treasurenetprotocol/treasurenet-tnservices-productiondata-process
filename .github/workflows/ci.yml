@@ -1,0 +1,34 @@
+# A consolidated GHA workflow using a few other workflow templates
+
+name: Consolidated GHA workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  add_timestamp:
+    # Use the GHA timestamp workflow template
+    uses: treasurenetprotocol/treasurenet-gha-cicd/.github/workflows/timestamp.yml@main
+     
+  scan_unwanted_words:
+    # scan unwanted words only if it is triggered by a pull request event
+    if: github.event_name == 'pull_request'
+    needs: add_timestamp
+    # Use the GHA workflow tempalte to scan for unwanted words
+    uses: treasurenetprotocol/treasurenet-gha-cicd/.github/workflows/words.yml@main
+
+  send_notification:
+    # this job should be the last job in the CI workflow
+    # send notification only if it is triggered by a push event, and it is main branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: add_timestamp
+    # Use the GHA workflow template to send a notification
+    uses: treasurenetprotocol/treasurenet-gha-cicd/.github/workflows/slack.yml@main
+    secrets:
+      slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+      slack_channel: ${{ secrets.SLACK_CHANNEL }}
+

@@ -48,7 +48,6 @@ const process = async (location_id, date) => {
     switch (location_id) {
     case 996986:
     case 1000225:
-        //从ZediData中取产量
         ldata = await ZediModel.getProductionDataFromZediData({
             sensor: 'Current Fluid Accumulation',
             location_id,
@@ -59,7 +58,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
 
     case 1000286:
@@ -74,7 +73,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
     case 1007764:
         ldata = await ZediModel.getProductionDataFromZediData({
@@ -87,7 +86,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
     case 1007986:
         ldata = await ZediModel.getProductionDataFromZediData({
@@ -100,7 +99,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
     case 1008545:
         ldata = await ZediModel.getProductionDataFromZediData({
@@ -113,7 +112,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
     case 1035344:
         ldata = await ZediModel.getProductionDataFromZediData({
@@ -126,7 +125,7 @@ const process = async (location_id, date) => {
             break;
         }
         liquid = BigNumber(ldata.recordset[0].amount);
-        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  //4位小数
+        amount = liquid.minus(liquid.times(watercut)).toFixed(4);  
         break;
     case 1049847:
         ldata = await ZediModel.getProductionDataFromZediData({
@@ -156,7 +155,6 @@ const process = async (location_id, date) => {
         return;
 
     }
-    //计算后写到MongoDB
     console.log(location_id,date,amount);
     await _save(location_id, date, amount, uniqueId);
     await logModel.newLogs({location_id, date});
