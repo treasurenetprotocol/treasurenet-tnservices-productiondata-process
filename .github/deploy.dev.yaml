@@ -1,0 +1,16 @@
+version: "3"
+services:
+  treasureNet_ogdataprocess:
+    build: ./ogdataprocess
+    image: {{ .DOCKER_TAG }}
+    restart: unless-stopped
+    container_name: ogdataprocess
+    environment:
+      - MONGO_URL={{ .MONGO_URL }}
+      - MSSQL_DATABASE_USER={{ .MSSQL_DATABASE_USER }}
+      - MSSQL_DATABASE_PASSWORD={{ .MSSQL_DATABASE_PASSWORD }}
+      - MSSQL_DATABASE_DBNAME={{ .MSSQL_DATABASE_DBNAME }}
+      - MSSQL_DATABASE_SERVER={{ .MSSQL_DATABASE_SERVER }}
+      - MSSQL_DATABASE_PORT={{ .MSSQL_DATABASE_PORT }}
+      - MSSQL_DATABASE_TABLE={{ .MSSQL_DATABASE_TABLE }}
+
